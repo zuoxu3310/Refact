@@ -1,0 +1,118 @@
+# MASA Configuration File
+
+# General settings
+notes: 'AAMAS MASA Implementation'
+benchmark_algo: 'MASA-dc'  # Algorithm options: 'MASA-dc', 'MASA-mlp', 'MASA-lstm', 'TD3-Profit', 'TD3-PR', 'TD3-SR', 'CRP', 'EG', 'OLMAR', 'PAMR', 'CORN', 'RMR', 'EIIE', 'PPN', 'RAT'
+market_name: 'DJIA'  # Financial Index options: 'DJIA', 'SP500', 'CSI300'
+topK: 5  # Number of assets in a portfolio (options: 5, 10, 20, 30)
+num_epochs: 1  # training episodes
+
+# Directory settings
+dataDir: './data'
+seed_num: 2022  # Random seed for reproducibility
+
+# Trading parameters
+trade_pattern: 1  # 1: Long only, 2: Long and short (Not applicable), 3: short only (Not applicable)
+lambda_1: 1000.0  # return reward weight
+lambda_2: 10.0  # action reward weight
+risk_default: 0.017  # Default risk boundary
+risk_up_bound: 0.012  # Risk boundary for uptrend
+risk_hold_bound: 0.014  # Risk boundary for no trend
+risk_down_bound: 0.017  # Risk boundary for downtrend
+risk_market: 0.001  # \Sigma_beta
+cbf_gamma: 0.7  # Control barrier function parameter
+
+# Training period configuration
+period_mode: 1  # Period configuration preset
+date_split:
+  1:  # Period mode 1
+    train_date_start: '2019-01-10'
+    train_date_end: '2023-12-01'
+    valid_date_start: '2023-12-02'
+    valid_date_end: '2024-12-02'
+    test_date_start: '2024-12-03'
+    test_date_end: '2025-05-03'
+  # Additional period modes can be added here
+
+# Financial parameters
+tradeDays_per_year: 252
+tradeDays_per_month: 21
+mkt_rf:  # Market risk-free rates
+  SP500: 1.6575
+  CSI300: 3.037
+  DJIA: 1.6575
+
+market_close_time:
+  CSI300: '15:00:00'
+
+# Investment environment parameters
+invest_env:
+  max_shares: 100
+  initial_asset: 1000000
+  transaction_cost: 0.0003
+  slippage: 0.001
+
+# Technical indicators
+tech_indicator:
+  talib: []  # TA-Lib indicators
+  extra: ['CHANGE']  # Extra indicators
+  dailyReturn_lookback: 5  # Lookback window for daily return calculation
+  otherRef_ma_window: 5  # Window size for moving average indicator
+
+# Model configurations
+model:
+  window_size: 31
+  po_lr: 0.0001
+  po_weight_decay: 0.001
+  use_features: ['close', 'open', 'high', 'low']
+
+# RL model parameters
+rl:
+  reward_scaling: 1
+  learning_rate: 0.0001
+  batch_size: 50
+  gradient_steps: 1
+  train_freq: [1, 'episode']
+  ars_trial: 10
+  
+  # TD3 specific parameters
+  td3:
+    policy_delay: 2
+    target_policy_noise: 0.2
+    target_noise_clip: 0.5
+    policy_kwargs:
+      net_arch: [1024, 512, 128]
+  
+  # SAC specific parameters
+  sac:
+    ent_coef: 'auto'
+    target_update_interval: 1
+    target_entropy: 'auto'
+    use_sde: false
+    sde_sample_freq: -1
+    use_sde_at_warmup: false
+  
+  # PPO specific parameters
+  ppo:
+    n_steps: 100
+
+# Market observer configurations
+market_observer:
+  freq: '1d'
+  finefreq: '60m'
+  fine_window_size: 4
+  feat_scaler: 10
+  hidden_vec_loss_weight: 10000.0
+  sigma_loss_weight: 100000.0
+  lambda_min: 0.0
+  lambda_max: 1.0
+  sigma_min: 0.0
+  sigma_max: 1.0
+  
+  # DC specific parameters
+  dc:
+    threshold: [0.01]
+
+# Algorithm lists
+only_long_algo_lst: ['CRP', 'EG', 'OLMAR', 'PAMR', 'RMR']
+use_cash_algo_lst: ['RAT', 'EIIE', 'PPN']
