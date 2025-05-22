@@ -23,7 +23,7 @@ from runners import run_rl_only, run_rl_controller
 def setup_environment():
     """Set up the execution environment for deterministic results"""
     os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'
-    os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+    os.environ['CUDA_VISIBLE_DEVICES'] = '1'
     th.backends.cudnn.deterministic = True
     th.backends.cudnn.benchmark = False
     os.environ['CUBLAS_WORKSPACE_CONFIG'] = ':4096:8'
